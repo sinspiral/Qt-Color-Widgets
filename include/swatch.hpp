@@ -56,10 +56,15 @@ class Swatch : public QWidget
      */
     Q_PROPERTY(QPen border READ border WRITE setBorder NOTIFY borderChanged)
 
+    /**
+     * \brief Selection border of the color
+     */
+    Q_PROPERTY(QPen selection READ selection WRITE setSelection NOTIFY selectionChanged)
+
    /**
-    * \brief Selection border of the color
+    * \brief Set the empty color for the swatch
     */
-   Q_PROPERTY(QPen selection READ selection WRITE setSelection NOTIFY selectionChanged)
+   Q_PROPERTY(QColor emptyColor READ emptyColor WRITE setEmptyColor NOTIFY emptyColorChanged)
 
    /**
     * \brief Margin around the colors
@@ -138,6 +143,7 @@ public:
     QPen border() const;
     QPen selection() const;
     int margin() const;
+    QColor emptyColor() const;
 
     int forcedRows() const;
     int forcedColumns() const;
@@ -153,6 +159,7 @@ public slots:
     void setBorder(const QPen& border);
     void setSelection(const QPen& selection);
     void setMargin(const int& margin);
+    void setEmptyColor(const QColor& emptyColor);
     void setForcedRows(int forcedRows);
     void setForcedColumns(int forcedColumns);
     void setReadOnly(bool readOnly);
@@ -175,6 +182,7 @@ signals:
     void borderChanged(const QPen& border);
     void selectionChanged(const QPen& selection);
     void marginChanged(const int& margin);
+    void emptyColorChanged(const QColor& emptyColor);
 
 protected:
     bool event(QEvent* event) Q_DECL_OVERRIDE;

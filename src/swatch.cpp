@@ -45,6 +45,7 @@ public:
     QPen         border;
     QPen         selection;
     int          margin;
+    QColor       emptyColor;
     int          forced_rows;
     int          forced_columns;
     bool         readonly;  ///< Whether the palette can be modified via user interaction
@@ -64,6 +65,7 @@ public:
           border(Qt::black, 1),
           selection(Qt::gray, 2, Qt::DotLine),
           margin(0),
+          emptyColor(QColor(0,0,0,0)),
           forced_rows(0),
           forced_columns(0),
           readonly(false),
@@ -335,6 +337,10 @@ void Swatch::paintEvent(QPaintEvent* event)
 
     QSizeF color_size = p->actualColorSize(rowcols);
     QPixmap alpha_pattern(":/color_widgets/alphaback.png");
+    QPen penEmptyBorder = p->border;
+    QColor colorEmptyBorder = p->border.color();
+    colorEmptyBorder.setAlpha(56);
+    penEmptyBorder.setColor(colorEmptyBorder);
     QPainter painter(this);
 
     QStyleOptionFrame panel;
@@ -352,6 +358,13 @@ void Swatch::paintEvent(QPaintEvent* event)
     {
         for ( int x = 0; x < rowcols.width() && i < count; x++, i++ )
         {
+            if(p->palette.colorAt(i) == p->emptyColor)
+            {
+              painter.setBrush(Qt::NoBrush);
+              painter.setPen(penEmptyBorder);
+              painter.drawRect(p->indexRect(i, rowcols, color_size));
+              continue;
+            }
             painter.setBrush(alpha_pattern);
             painter.drawRect(p->indexRect(i, rowcols, color_size));
             painter.setBrush(p->palette.colorAt(i));
@@ -814,6 +827,21 @@ void Swatch::setSelection(const QPen& selection)
     {
         p->selection = selection;
         emit selectionChanged(selection);
+        update();
+    }
+}
+
+QColor Swatch::emptyColor() const
+{
+    return p->emptyColor;
+}
+
+void Swatch::setEmptyColor(const QColor& emptyColor)
+{
+    if ( emptyColor != p->emptyColor )
+    {
+        p->emptyColor = emptyColor;
+        emit emptyColorChanged(emptyColor);
         update();
     }
 }
