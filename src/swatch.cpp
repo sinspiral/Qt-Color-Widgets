@@ -332,6 +332,7 @@ void Swatch::paintEvent(QPaintEvent* event)
         return;
 
     QSizeF color_size = p->actualColorSize(rowcols);
+    QPixmap alpha_pattern(":/color_widgets/alphaback.png");
     QPainter painter(this);
 
     QStyleOptionFrame panel;
@@ -349,6 +350,8 @@ void Swatch::paintEvent(QPaintEvent* event)
     {
         for ( int x = 0; x < rowcols.width() && i < count; x++, i++ )
         {
+            painter.setBrush(alpha_pattern);
+            painter.drawRect(p->indexRect(i, rowcols, color_size));
             painter.setBrush(p->palette.colorAt(i));
             painter.drawRect(p->indexRect(i, rowcols, color_size));
         }
