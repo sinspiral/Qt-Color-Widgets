@@ -43,6 +43,7 @@ public:
     QSize        color_size; ///< Preferred size for the color squares
     ColorSizePolicy size_policy;
     QPen         border;
+    int          margin;
     int          forced_rows;
     int          forced_columns;
     bool         readonly;  ///< Whether the palette can be modified via user interaction
@@ -60,6 +61,7 @@ public:
           color_size(16,16),
           size_policy(Hint),
           border(Qt::black, 1),
+          margin(0),
           forced_rows(0),
           forced_columns(0),
           readonly(false),
@@ -189,10 +191,10 @@ public:
             return QRectF();
 
         return QRectF(
-            index % rowcols.width() * color_size.width(),
-            index / rowcols.width() * color_size.height(),
-            color_size.width(),
-            color_size.height()
+            index % rowcols.width() * color_size.width() + margin,
+            index / rowcols.width() * color_size.height() + margin,
+            color_size.width() - margin * 2,
+            color_size.height() - margin * 2
         );
     }
     /**
@@ -240,8 +242,8 @@ QSize Swatch::sizeHint() const
         return QSize();
 
     return QSize(
-        p->color_size.width()  * rowcols.width(),
-        p->color_size.height() * rowcols.height()
+        (p->color_size.width() + p->margin * 2)  * rowcols.width(),
+        (p->color_size.height() + p->margin * 2) * rowcols.height()
     );
 }
 
@@ -777,6 +779,21 @@ void Swatch::setBorder(const QPen& border)
     {
         p->border = border;
         emit borderChanged(border);
+        update();
+    }
+}
+
+int Swatch::margin() const
+{
+    return p->margin;
+}
+
+void Swatch::setMargin(const int& margin)
+{
+    if ( margin != p->margin )
+    {
+        p->margin = margin;
+        emit marginChanged(margin);
         update();
     }
 }

@@ -56,6 +56,11 @@ class Swatch : public QWidget
      */
     Q_PROPERTY(QPen border READ border WRITE setBorder NOTIFY borderChanged)
 
+     /**
+      * \brief Margin around the colors
+      */
+     Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
+
     /**
      * \brief Forces the Swatch to display that many rows of colors
      *
@@ -126,6 +131,7 @@ public:
     QSize colorSize() const;
     ColorSizePolicy colorSizePolicy() const;
     QPen border() const;
+    int margin() const;
 
     int forcedRows() const;
     int forcedColumns() const;
@@ -139,6 +145,7 @@ public slots:
     void setColorSize(const QSize& colorSize);
     void setColorSizePolicy(ColorSizePolicy colorSizePolicy);
     void setBorder(const QPen& border);
+    void setMargin(const int& margin);
     void setForcedRows(int forcedRows);
     void setForcedColumns(int forcedColumns);
     void setReadOnly(bool readOnly);
@@ -159,6 +166,7 @@ signals:
     void forcedColumnsChanged(int forcedColumns);
     void readOnlyChanged(bool readOnly);
     void borderChanged(const QPen& border);
+    void marginChanged(const int& margin);
 
 protected:
     bool event(QEvent* event) Q_DECL_OVERRIDE;
