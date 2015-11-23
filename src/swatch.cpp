@@ -107,7 +107,7 @@ public:
         if ( event->mimeData()->hasColor() )
         {
             drop_color = event->mimeData()->colorData().value<QColor>();
-            drop_color.setAlpha(255);
+            
         }
         else if ( event->mimeData()->hasText() )
         {
