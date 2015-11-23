@@ -43,6 +43,7 @@ public:
     QSize        color_size; ///< Preferred size for the color squares
     ColorSizePolicy size_policy;
     QPen         border;
+    QPen         selection;
     int          margin;
     int          forced_rows;
     int          forced_columns;
@@ -61,6 +62,7 @@ public:
           color_size(16,16),
           size_policy(Hint),
           border(Qt::black, 1),
+          selection(Qt::gray, 2, Qt::DotLine),
           margin(0),
           forced_rows(0),
           forced_columns(0),
@@ -396,7 +398,7 @@ void Swatch::paintEvent(QPaintEvent* event)
         painter.setBrush(Qt::transparent);
         painter.setPen(QPen(Qt::darkGray, 2));
         painter.drawRect(rect);
-        painter.setPen(QPen(Qt::gray, 2, Qt::DotLine));
+        painter.setPen(p->selection);
         painter.drawRect(rect);
     }
 }
@@ -797,6 +799,21 @@ void Swatch::setMargin(const int& margin)
     {
         p->margin = margin;
         emit marginChanged(margin);
+        update();
+    }
+}
+
+QPen Swatch::selection() const
+{
+    return p->selection;
+}
+
+void Swatch::setSelection(const QPen& selection)
+{
+    if ( selection != p->selection )
+    {
+        p->selection = selection;
+        emit selectionChanged(selection);
         update();
     }
 }
