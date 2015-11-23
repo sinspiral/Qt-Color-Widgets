@@ -56,10 +56,10 @@ class Swatch : public QWidget
      */
     Q_PROPERTY(QPen border READ border WRITE setBorder NOTIFY borderChanged)
 
-     /**
-      * \brief Margin around the colors
-      */
-     Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
+   /**
+    * \brief Margin around the colors
+    */
+   Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
 
     /**
      * \brief Forces the Swatch to display that many rows of colors
