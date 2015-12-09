@@ -379,7 +379,7 @@ void Swatch::paintEvent(QPaintEvent* event)
     if ( p->drop_index != -1 )
     {
         QRectF drop_area = p->indexRect(p->drop_index, rowcols, color_size);
-        if ( p->drop_overwrite && p->palette.colorAt(p->drop_index) == p->emptyColor)
+        if ( p->drop_overwrite || p->palette.colorAt(p->drop_index) == p->emptyColor)
         {
             painter.setBrush(p->drop_color);
             painter.setPen(QPen(Qt::gray));
