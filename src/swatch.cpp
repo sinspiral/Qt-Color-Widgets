@@ -132,7 +132,8 @@ public:
                     drop_index++;
                 // Dragged to the middle of the square, overwrite existing color
                 else if ( event->posF().x() > drop_rect.top() + drop_rect.height() / 4 &&
-                        ( event->dropAction() != Qt::MoveAction || event->source() != owner ) )
+                        ( event->dropAction() != Qt::MoveAction || event->source() != owner || 
+                          palette.colorAt(drop_index) == emptyColor ) )
                     drop_overwrite = true;
             }
             else
@@ -142,7 +143,8 @@ public:
                     drop_index++;
                 // Dragged to the middle of the square, overwrite existing color
                 else if ( event->posF().x() > drop_rect.left() + drop_rect.width() / 4 &&
-                        ( event->dropAction() != Qt::MoveAction || event->source() != owner ) )
+                        ( event->dropAction() != Qt::MoveAction || event->source() != owner || 
+                          palette.colorAt(drop_index) == emptyColor ) )
                     drop_overwrite = true;
             }
         }
@@ -377,7 +379,7 @@ void Swatch::paintEvent(QPaintEvent* event)
     if ( p->drop_index != -1 )
     {
         QRectF drop_area = p->indexRect(p->drop_index, rowcols, color_size);
-        if ( p->drop_overwrite )
+        if ( p->drop_overwrite && p->palette.colorAt(p->drop_index) == p->emptyColor)
         {
             painter.setBrush(p->drop_color);
             painter.setPen(QPen(Qt::gray));
@@ -641,7 +643,12 @@ void Swatch::dropEvent(QDropEvent *event)
     if ( event->dropAction() == Qt::MoveAction && event->source() == this )
     {
         // Not moved => noop
-        if ( p->drop_index != p->drag_index && p->drop_index != p->drag_index + 1 )
+        if ( p->drop_index != p->drag_index && p->palette.colorAt(p->drop_index) == p->emptyColor )
+        {
+            p->palette.setColorAt(p->drag_index, p->emptyColor, name);
+            p->palette.setColorAt(p->drop_index, p->drop_color, name);
+        }
+        else if ( p->drop_index != p->drag_index && p->drop_index != p->drag_index + 1 )
         {
             // Erase the old color
             p->palette.eraseColor(p->drag_index);
