@@ -101,4 +101,6 @@ private:
 
 } // namespace color_widgets
 
+Q_DECLARE_METATYPE(color_widgets::ColorPreview::DisplayMode)
+
 #endif // COLOR_PREVIEW_HPP
